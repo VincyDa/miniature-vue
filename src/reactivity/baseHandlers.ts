@@ -1,12 +1,13 @@
 import { track, trigger } from './effect'
 import {reactive, ReactiveFlags, readonly} from "./reactive";
-import {isObject} from "../share";
+import {extend, isObject} from "../share";
 
 const get = createGetter()
 const readonlyGet = createGetter(true)
 const set = createSetter()
+const shallowReadonlyGet = createGetter(true, true)
 
-function createGetter(isReadonly = false) {
+function createGetter(isReadonly = false, shallow = false) {
     return function get(target, key, receiver) {
         if(key === ReactiveFlags.IS_REACTIVE){
             return !isReadonly;
@@ -14,6 +15,7 @@ function createGetter(isReadonly = false) {
             return isReadonly;
         }
         const res = Reflect.get(target, key, receiver);
+        if(shallow) return res;
         //[嵌套转换]
         //在 shared 中写一个工具函数 isObject 用于判断是否是对象
         if(isObject(res)){
@@ -53,3 +55,9 @@ export const readonlyHandlers = {
         return true
     },
 }
+
+// 这里我们发现 shalloReadonlyHandlers 和 readonly 的 set 一样
+// 就可以复制一份，复写 get 就好了
+export const shallowReadonlyHandlers = extend({}, readonlyHandlers, {
+    get: shallowReadonlyGet,
+})
