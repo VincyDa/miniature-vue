@@ -1,5 +1,8 @@
 import {extend} from "../share";
 
+let shouldTrack;
+let activeEffect;
+
 class ReactiveEffect{
     private _fn: any;
     deps = [];
@@ -10,7 +13,20 @@ class ReactiveEffect{
     }
     run(){
         activeEffect = this;
-        return this._fn();
+        //1.会收集依赖
+        //2.shouldTrack来做区分
+        if(!this.active){
+            return this._fn();
+        }
+
+        shouldTrack = true;
+        activeEffect = this;
+
+        const result = this._fn();
+        //reset
+        shouldTrack = false;
+
+        return result
     }
     stop(){
         if(this.active){
@@ -45,6 +61,7 @@ export function track(target, key){
         depsMap.set(key, dep);
     }
     if (!activeEffect) return;
+    if(!shouldTrack) return;
     dep.add(activeEffect);
     //const dep = new Set();
     activeEffect.deps.push(dep);
@@ -63,7 +80,7 @@ export function trigger(target, key){
     }
 }
 
-let activeEffect;
+
 
 export function effect(fn, options:any = {}){
     //fn
