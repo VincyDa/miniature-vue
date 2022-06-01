@@ -49,6 +49,7 @@ const targetMap = new Map();
 
 export function track(target, key){
     //target -> key -> dep
+    if(!isTracking()) return;
     let depsMap = targetMap.get(target);
     if(!depsMap){
         depsMap = new Map();
@@ -60,17 +61,26 @@ export function track(target, key){
         dep = new Set();
         depsMap.set(key, dep);
     }
-    if (!activeEffect) return;
-    if(!shouldTrack) return;
+    trackEffect(dep);
+}
+
+export function isTracking(){
+    return shouldTrack && activeEffect !== undefined;
+}
+
+export function trackEffect(dep){
+    if(dep.has(activeEffect)) return;
     dep.add(activeEffect);
-    //const dep = new Set();
     activeEffect.deps.push(dep);
 }
 
 export function trigger(target, key){
     let depsMap = targetMap.get(target);
     let dep = depsMap.get(key);
+    triggerEffect(dep);
+}
 
+export function triggerEffect(dep){
     for(const effect of dep){
         if(effect.scheduler){
             effect.scheduler();
@@ -79,8 +89,6 @@ export function trigger(target, key){
         }
     }
 }
-
-
 
 export function effect(fn, options:any = {}){
     //fn
