@@ -60,8 +60,8 @@ describe('ref', () => {
 
         const proxyUser = proxyRefs(user);
         expect(user.age.value).toBe(10);
-        expect(user.age).toBe(10);
-        expect(user.name).toBe("xiaohong");
+        expect(proxyUser.age).toBe(10);
+        expect(proxyUser.name).toBe("xiaohong");
 
         //template
         //ref.value
@@ -69,6 +69,7 @@ describe('ref', () => {
         //setup(){return {ref}}
 
         proxyUser.age = 20;
+        //set -> ref .value
         expect(proxyUser.age).toBe(20);
         expect(user.age.value).toBe(20);
 
