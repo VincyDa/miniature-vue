@@ -1,8 +1,10 @@
 import { h } from "../../lib/miniature-vue.esm.js";
+import { Foo } from "./Foo"
 
 window.self = null
 export const App = {
     // 必须要写 render
+    name:"App",
     render() {
         window.self = this;
         // ui
@@ -18,9 +20,13 @@ export const App = {
                     console.log("mousedown")
                 }
             },
+            [h("div", {}, "he," + this.msg), h(Foo,
+                {
+                   count: 1,
+                },)]
             // setupState
             // this.$el -> get root element
-            "hi, " + this.msg
+            // "hi, " + this.msg
             // string
             // "hi, mini-vue"
             // Array
