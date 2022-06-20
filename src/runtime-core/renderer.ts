@@ -1,5 +1,6 @@
 import { isObject } from "../shared/index";
 import { createComponentInstance, setupComponent } from "./component";
+import {ShapeFlags} from "../shared/ShapeFlags";
 
 export function render(vnode, container) {
     patch(vnode, container);
@@ -10,9 +11,14 @@ function patch(vnode, container) {
     // 是 element 那么就应该处理 element
     // 思考题： 如何去区分是 element 还是 component 类型呢？
     // processElement();
-    if (typeof vnode.type === "string") {
+    //ShapeFlags
+    //vnode -> falg
+    //element
+    const {shapeFlag } = vnode
+    if (shapeFlag & ShapeFlags.ELEMENT) {
         processElement(vnode, container);
-    } else if (isObject(vnode.type)) {
+        //STATEFUL_COMPONENT
+    } else if (shapeFlag & ShapeFlags.STATEFUL_COMPONENT) {
         processComponent(vnode, container);
     }
 }
@@ -25,12 +31,14 @@ function mountElement(vnode: any, container: any) {
     //vnode -> element -> div
     const el = (vnode.el = document.createElement(vnode.type));
 
-    const { children } = vnode;
+    const { children, shapeFlag } = vnode;
 
     // children
-    if (typeof children === "string") {
+    if (shapeFlag & ShapeFlags.TEXT_CHILDREN) {
+        // text_children
         el.textContent = children;
-    } else if (Array.isArray(children)) {
+    } else if (shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
+        //array_children
         mountChildren(vnode, el);
     }
 
