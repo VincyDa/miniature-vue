@@ -1,4 +1,6 @@
- export const Foo = {
+import {h} from "../../lib/miniature-vue.cjs";
+
+export const Foo = {
     setup(props) {
         //props.count
         console.log(props);

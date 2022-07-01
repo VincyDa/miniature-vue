@@ -4,6 +4,20 @@ export function isObject(val){
     return val !== null && typeof val === "object"
 }
 
+export const camelize = (str:string) => {
+    return str.replace(/-(\w)/g, (_,c)=>{
+        return c ? c.toUpperCase():"";
+    });
+};
+
+const capitalize = (str:string) => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
+export const toHandlerKey = (str:string) => {
+    return str ? "on" + capitalize(str) : "";
+};
+
 export const hasChanged = (val, newVal) => {
     return !Object.is(val, newVal)
 }
