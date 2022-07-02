@@ -1,9 +1,19 @@
-import {isReadonly, shallowReadonly} from "../reactive";
+import { isReadonly, shallowReadonly } from "../reactive";
 
-it('happy path', () => {
-    const original = {bar: {foo: 1}}
-    //shallow的意思是浅的，默认 readonly 是嵌套的，而 shallowReadonly 刚好相反
-    const shallow = shallowReadonly(original);
-    expect(isReadonly(shallow)).toBe(true);
-    expect(isReadonly(shallow.bar)).toBe(false);
+describe("shallowReadonly", () => {
+  test("should not make non-reactive properties reactive", () => {
+    const props = shallowReadonly({ n: { foo: 1 } });
+    expect(isReadonly(props)).toBe(true);
+    expect(isReadonly(props.n)).toBe(false);
+  });
+
+  it("should call console.warn when set", () => {
+    console.warn = jest.fn();
+    const user = shallowReadonly({
+      age: 10,
+    });
+
+    user.age = 11;
+    expect(console.warn).toHaveBeenCalled();
+  });
 });
