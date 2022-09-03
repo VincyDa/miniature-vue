@@ -1,4 +1,4 @@
-import { h, ref } from "../../lib/miniature-vue.esm.js";
+import { h, ref } from "../../lib/guide-mini-vue.esm.js";
 
 export const App = {
   name: "App",

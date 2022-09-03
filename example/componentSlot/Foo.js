@@ -1,4 +1,4 @@
-import { h, renderSlots } from "../../lib/miniature-vue.esm.js";
+import { h, renderSlots } from "../../lib/guide-mini-vue.esm.js";
 
 export const Foo = {
   setup() {

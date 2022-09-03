@@ -1,8 +1,8 @@
 {
-  "name": "miniature-vue",
+  "name": "guide-mini-vue",
   "version": "1.0.0",
-  "main": "lib/miniature-vue.cjs.js",
-  "module": "lib/miniature-vue.esm.js",
+  "main": "lib/guide-mini-vue.cjs.js",
+  "module": "lib/guide-mini-vue.esm.js",
   "license": "MIT",
   "scripts": {
     "test": "jest",

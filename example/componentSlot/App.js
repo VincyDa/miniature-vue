@@ -1,4 +1,4 @@
-import { h, createTextVNode } from "../../lib/miniature-vue.esm.js";
+import { h, createTextVNode } from "../../lib/guide-mini-vue.esm.js";
 import { Foo } from "./Foo.js";
 
 // Fragment 以及 Text
